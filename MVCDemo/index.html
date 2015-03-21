@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>DEMO</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            div{
+                border: #0F0F0F thick solid;
+                height: 25%;
+                width: 25%;
+                border-radius: 20px;
+                position:  relative;
+                top:50%;
+                left:50%;
+                margin: -15%;
+            }
+            
+            div form
+            {
+                margin: 5%;
+            }
+
+            html{
+                height: 100%;
+            }
+            body {
+                height: 100%;
+            }
+
+        </style>
+        <script type="text/javascript">
+            function formSubmit() {
+
+                if (document.getElementById("txtValue").value.length === 0)
+                {
+                    document.getElementById("divNotice").innerText = 'Please enter something';
+                    document.getElementById("txtValue").style["background-color"] = "RED";
+                    return false;
+                }
+
+            }
+        </script>
+    </head>
+    <body>
+        <div>
+            <form method="POST" action="Controller/CtrlDemo.php" onsubmit="return formSubmit();">
+                <p id="divNotice"></p>
+                <input type="text" id="txtValue" name="txtValue" placeholder="Value Here" />
+                <input type="Submit"/>
+            </form>
+        </div>
+    </body>
+</html>
