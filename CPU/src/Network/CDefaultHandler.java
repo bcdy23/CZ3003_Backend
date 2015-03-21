@@ -26,10 +26,9 @@ public class CDefaultHandler implements Observer {
 
         try (Writer objWriter = Channels.newWriter(Channels.newChannel(objSocket.getOutputStream()), StandardCharsets.US_ASCII.name())) {
 
-            objWriter.write("Return stream");
+            objWriter.write("Return stream");            
 
-
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.out.println(ex);
         }
 

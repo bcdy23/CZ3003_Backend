@@ -30,10 +30,13 @@ public class CSocket extends Observable implements Runnable {
     public void run() {
         while (true) {
             try {
+
                 Socket objSocket = objServerSocket.accept();
 
-                this.setChanged();
-                this.notifyObservers(objSocket);
+                new Thread(() -> {
+                    CSocket.this.setChanged();
+                    CSocket.this.notifyObservers(objSocket);
+                }).start();
 
             } catch (IOException ex) {
                 System.out.println(ex);
