@@ -44,8 +44,8 @@
                   <h3>Feedback <small>Your opinion matters to us.</small></h3>
                     <!-- Feedback Form -->
                     <div class="form-group">
-                        <label>First Name</label>
-                        <input type="text" class="form-control" id="feedback_fname_input" placeholder="Enter first name">
+                        <label>Name</label>
+                        <input type="text" class="form-control" id="feedback_name_input" placeholder="Enter first name">
                     </div>
                     
                     <div class="form-group">
