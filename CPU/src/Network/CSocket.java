@@ -5,6 +5,7 @@
  */
 package Network;
 
+import Concurrency.CThreadPoolManager;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -33,10 +34,10 @@ public class CSocket extends Observable implements Runnable {
 
                 Socket objSocket = objServerSocket.accept();
 
-                new Thread(() -> {
+                CThreadPoolManager.runTask(() -> {
                     CSocket.this.setChanged();
                     CSocket.this.notifyObservers(objSocket);
-                }).start();
+                });
 
             } catch (IOException ex) {
                 System.out.println(ex);
