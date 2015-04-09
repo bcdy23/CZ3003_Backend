@@ -1,4 +1,4 @@
-package DBProxy.Plugin.proxy;
+package DBProxy.Plugins.proxy;
 
 import DBProxy.Core.Engine;
 import DBProxy.MySQL.Protocol.Com_Initdb;
@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.BufferedInputStream;
 import org.apache.log4j.Logger;
-import DBProxy.Plugin.Base;
+import DBProxy.Plugins.Base;
 
 public class Proxy extends Base {
 

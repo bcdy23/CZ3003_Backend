@@ -1,4 +1,4 @@
-package DBProxy.Plugin.debug;
+package DBProxy.Plugins.debug;
 
 /*
  * Debug plugin
@@ -10,7 +10,7 @@ import DBProxy.MySQL.Protocol.Flags;
 import DBProxy.MySQL.Protocol.Packet;
 import java.util.ArrayList;
 import org.apache.log4j.Logger;
-import DBProxy.Plugin.Base;
+import DBProxy.Plugins.Base;
 
 public class Debug extends Base {
     public Logger logger = Logger.getLogger("Plugin.Debug");

@@ -1,4 +1,4 @@
-package DBProxy.Plugin;
+package DBProxy.Plugins;
 
 /*
  * Create an empty abstract class to allow plugins to only

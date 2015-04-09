@@ -1,4 +1,4 @@
-package DBProxy.Plugin.example;
+package DBProxy.Plugins.example;
 
 /*
  * Example plugin. Just log timing information and hook names
@@ -6,7 +6,7 @@ package DBProxy.Plugin.example;
 
 import DBProxy.Core.Engine;
 import org.apache.log4j.Logger;
-import DBProxy.Plugin.Base;
+import DBProxy.Plugins.Base;
 
 public class Example extends Base {
     public Logger logger = Logger.getLogger("Plugin.Base");

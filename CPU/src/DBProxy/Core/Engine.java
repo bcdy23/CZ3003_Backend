@@ -8,7 +8,7 @@ package DBProxy.Core;
 import DBProxy.MySQL.Protocol.Flags;
 import DBProxy.MySQL.Protocol.Handshake;
 import DBProxy.MySQL.Protocol.HandshakeResponse;
-import DBProxy.Plugin.Base;
+import DBProxy.Plugins.Base;
 import java.net.Socket;
 import java.io.IOException;
 import java.io.InputStream;
