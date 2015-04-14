@@ -20,12 +20,25 @@ import java.util.HashMap;
  */
 public class CPublisherManager {
 
-    private static final String strMsg = "[{\"id\": %s, \"message\":\"%s\"}]";
+    private static final String strSocialMsg = "[{\"id\": %s, \"message\":\"%s\"}]";
+
+    private static final String strSMSMsg = "{"
+            + "    \"id\": %s,\n"
+            + "    \"sms\": [\n"
+            + "        {\n"
+            + "            \"from\": \"+1 484-870-3404\",\n"
+            + "            \"to\": \"%s\",\n"
+            + "            \"msg\": \"%s\"\n"
+            + "        }\n"
+            + "    ]\n"
+            + "}";
 
     private static void sendToSocial(String pStrMsg) throws UnknownHostException {
+        CPublisherFactory.getSocialPublisher().sendMessage(String.format(strSocialMsg, "%d", pStrMsg));
+    }
 
-        CPublisherFactory.getSocialPublisher().sendMessage(String.format(strMsg, "%d", pStrMsg));
-
+    private static void sendToSMS(String pStrMsg) throws UnknownHostException {
+        CPublisherFactory.getSMSPublisher().sendMessage(String.format(strSMSMsg, "%d", "+6591544288", pStrMsg));
     }
 
     public static void publishOngoingIncident(String pStrQuery) {
@@ -41,6 +54,7 @@ public class CPublisherManager {
             CNotificationManager.notifiyOngoingIncident();
 
             sendToSocial(strMsg);
+            sendToSMS(strMsg);
 
         } catch (SQLException | UnknownHostException ex) {
         }
@@ -52,26 +66,28 @@ public class CPublisherManager {
         try {
             HashMap<String, String> objHM = new MHaze().getNationalPSIInfo();
 
-            String strMsg = String.format(CSettingManager.getSetting("Haze_Message"), objHM.get("PSI"), objHM.get("Desc"));
+            String strMsg = String.format(CSettingManager.getSetting("Haze_Message"), "%s", objHM.get("PSI"), objHM.get("Desc"));
 
             CNotificationManager.notifiyHaze();
 
             sendToSocial(strMsg);
+            sendToSMS(strMsg);
 
         } catch (SQLException | UnknownHostException ex) {
         }
     }
-    
-      public static void publishDengue() {
+
+    public static void publishDengue() {
 
         try {
             HashMap<String, String> objHM = new MDengue().getDengueZoneInfo();
 
-            String strMsg = String.format(CSettingManager.getSetting("Dengue_Message"), objHM.get("Red"), objHM.get("Yellow"));
+            String strMsg = String.format(CSettingManager.getSetting("Dengue_Message"), "%s", objHM.get("Red"), objHM.get("Yellow"));
 
             CNotificationManager.notifiyDengue();
 
             sendToSocial(strMsg);
+            sendToSMS(strMsg);
 
         } catch (SQLException | UnknownHostException ex) {
         }

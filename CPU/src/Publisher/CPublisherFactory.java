@@ -14,9 +14,13 @@ import java.net.UnknownHostException;
  * @author Bryden
  */
 public class CPublisherFactory {
-    
+
     public static CPublisher getSocialPublisher() throws UnknownHostException {
         return new CPublisher(InetAddress.getByName("127.0.0.1"), CSettingManager.getIntSetting("Social_Port"));
     }
-    
+
+    public static CPublisher getSMSPublisher() throws UnknownHostException {
+        return new CPublisher(InetAddress.getByName("127.0.0.1"), CSettingManager.getIntSetting("SMS_Port"));
+    }
+
 }

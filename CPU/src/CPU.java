@@ -29,8 +29,10 @@ public class CPU {
         new Thread(() -> {
             CNetworkManager.createProxyListener();
         }).start();
-
+        
+        CPublisherManager.publishHaze();
         CPublisherManager.publishDengue();
+        
     }
 
 }

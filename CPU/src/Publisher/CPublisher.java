@@ -13,6 +13,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.channels.Channels;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -25,7 +27,7 @@ public class CPublisher {
     private final InetAddress objAdd;
     private final int intPort;
 
-    String[] strBuffer = new String[Max_Buffer];
+    private final String[] strBuffer = new String[Max_Buffer];
 
     int intId = 0;
 
@@ -38,7 +40,7 @@ public class CPublisher {
 
         int intTemp;
 
-        synchronized (this) {
+        synchronized (strBuffer) {
             strBuffer[intId] = pStrMessage;
             intTemp = intId++;
         }
@@ -48,14 +50,16 @@ public class CPublisher {
 
                 Writer objWriter = Channels.newWriter(Channels.newChannel(client.getOutputStream()), StandardCharsets.US_ASCII.name());
 
-                objWriter.write(String.format(pStrMessage, intTemp));
-                objWriter.flush();
+                synchronized (strBuffer) {
+                    objWriter.write(String.format(pStrMessage, intTemp, new SimpleDateFormat("HH:mm dd-MMM").format(new Date())));
+                    objWriter.flush();
+                }
 
                 client.shutdownOutput();
 
                 try (Reader objReader = Channels.newReader(Channels.newChannel(client.getInputStream()), StandardCharsets.US_ASCII.name());
                         BufferedReader objOutReader = new BufferedReader(objReader)) {
-                    //System.out.println(objOutReader.read());
+                    System.out.println(objOutReader.readLine());
 
                 }
 

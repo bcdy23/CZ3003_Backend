@@ -11,8 +11,9 @@
     <entry key="DB_Port">3306</entry>
     <entry key="DB_IP">127.0.0.1</entry>
     
-    
     <entry key="Social_Port">33006</entry>
+        
+    <entry key="SMS_Port">33007</entry>
     
     <entry key="Notification_Port">33008</entry>
     
@@ -20,7 +21,7 @@
     
     <entry key="Incident_Message">Incident Report : %s at %s. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
     
-    <entry key="Haze_Message">Haze Report : National PSI at %s , Air quality %s. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
+    <entry key="Haze_Message">Haze Report (%s): PSI at %s , Air quality %s. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
     
-    <entry key="Dengue_Message">Dengue Report : %s red zone, %s yellow zone. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
+    <entry key="Dengue_Message">Dengue Report (%s) : %s red zone, %s yellow zone. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
 </properties>
