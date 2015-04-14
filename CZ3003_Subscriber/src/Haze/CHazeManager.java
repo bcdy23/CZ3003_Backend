@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Dengue;
+package Haze;
 
+import Dengue.CDengueFactory;
 import Entity.CDengueCluster;
 import Network.CNetworkFactory;
 import java.io.BufferedReader;
@@ -22,61 +23,56 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.XML;
 
 /**
  *
  * @author Bryden
  */
-public class CDengueManager {
+public class CHazeManager {
 
     private static final ScheduledExecutorService objScheduler
             = Executors.newScheduledThreadPool(1);
 
     public static void schedulePolling() {
         final Runnable poller = () -> {
-            loadDengueCluster();
+            loadHazeInfo();
         };
 
         objScheduler.scheduleAtFixedRate(poller, 0, 30, TimeUnit.MINUTES);
     }
 
-    public static void loadDengueCluster() {
+    public static void loadHazeInfo() {
 
-        List<CDengueCluster> lstCluster = new ArrayList<>();
-
-        String strJson = "";
+        String strOutput = "";
 
         try {
-            strJson = CNetworkFactory.createDengueClusterRequest().sendRequest();
+            strOutput = CNetworkFactory.createHazeRequest().sendRequest();
         } catch (IOException ex) {
         }
 
-        if (strJson.isEmpty()) {
+        if (strOutput.isEmpty()) {
             return;
         }
 
-        JSONArray objArray = new JSONObject(strJson).getJSONArray("SrchResults");
+        JSONObject objJson = XML.toJSONObject(strOutput);
 
-        int intCount = objArray.getJSONObject(0).getInt("FeatCount");
 
-        for (int intCounter = 1; intCounter <= intCount; intCounter++) {
-            lstCluster.add(CDengueFactory.loadCluster(objArray.getJSONObject(intCounter)));
-        }
 
         StringBuilder objSB = new StringBuilder();
 
         objSB.append("[");
 
-        for (CDengueCluster objCluster : lstCluster) {
+       /* for (CDengueCluster objCluster : lstCluster) {
             objSB.append(objCluster.toJSON());
             objSB.append(",");
-        }
+        }*/
 
         objSB.deleteCharAt(objSB.lastIndexOf(","));
 
         objSB.append("]");
 
-        sendInfoToCPU(objSB.toString(), 33009);
+        sendInfoToCPU(objSB.toString(), 33010);
 
     }
 
@@ -102,5 +98,4 @@ public class CDengueManager {
             }
         }).start();
     }
-
 }
