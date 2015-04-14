@@ -15,7 +15,7 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 public class CTwitter implements ISocial {
 
-    private Twitter objTwitter;
+    private final Twitter objTwitter;
 
     public CTwitter() {
         ConfigurationBuilder cb = new ConfigurationBuilder();
