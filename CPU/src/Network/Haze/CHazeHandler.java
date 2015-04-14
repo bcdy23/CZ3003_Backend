@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Network.Dengue;
+package Network.Haze;
 
 import Model.MDengue;
+import Model.MHaze;
 import Notification.CNotificationManager;
 import Publisher.CPublisherManager;
 import java.io.BufferedReader;
@@ -23,7 +24,7 @@ import org.json.simple.parser.ParseException;
  *
  * @author Bryden
  */
-public class CDengueHandler implements Observer {
+public class CHazeHandler implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
@@ -40,12 +41,11 @@ public class CDengueHandler implements Observer {
 
             objSB.append(objReader.readLine());
 
-            new MDengue().addCluster(objSB.toString());
+            new MHaze().addHazeInfo(objSB.toString());
 
-            CNotificationManager.notifiyDengue();
-            CPublisherManager.publishDengue();
+            CNotificationManager.notifiyHaze();
             CPublisherManager.publishHaze();
-            
+
         } catch (IOException | ParseException ex) {
             System.out.println(ex);
             intReturn = -1;

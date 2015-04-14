@@ -81,4 +81,18 @@ public class CNetworkManager {
         objDefaultSocket.run();
 
     }
+
+    public static void createHazeListener() {
+        CSocket objDefaultSocket;
+
+        try {
+            objDefaultSocket = new CSocket(CSettingManager.getIntSetting("Haze_Port"));
+        } catch (IOException ex) {
+            System.out.println(ex);
+            return;
+        }
+       // objDefaultSocket.addObserver(new CHazeHandler());
+
+        objDefaultSocket.run();
+    }
 }

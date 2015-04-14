@@ -19,6 +19,8 @@
     
     <entry key="Dengue_Port">33009</entry>
     
+    <entry key="Haze_Port">33010</entry>
+    
     <entry key="Incident_Message">Incident Report : %s at %s. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
     
     <entry key="Haze_Message">Haze Report (%s): PSI at %s , Air quality %s. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
