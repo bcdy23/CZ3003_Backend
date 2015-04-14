@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.BufferedInputStream;
 import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 
@@ -28,7 +29,7 @@ public class Engine implements Runnable {
     public OutputStream clientOut = null;
     
     // Plugins
-    public ArrayList<Base> plugins = new ArrayList<>();
+    public List<Base> plugins;
     
     // Packet Buffer. ArrayList so we can grow/shrink dynamically
     public ArrayList<byte[]> buffer = new ArrayList<>();
@@ -59,7 +60,7 @@ public class Engine implements Runnable {
     // Allow plugins to muck with the modes
     public int nextMode = Flags.MODE_INIT;
     
-    public Engine(int port, Socket clientSocket, ArrayList<Base> plugins) throws IOException {
+    public Engine(int port, Socket clientSocket, List<Base> plugins) throws IOException {
         this.port = port;
         this.plugins = plugins;
         

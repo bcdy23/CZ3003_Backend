@@ -2,5 +2,25 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <comment>Settings for CPU</comment>
-    <entry key="CID">1</entry>
+    <entry key="logConf">conf/log.conf</entry>
+    
+    <entry key="Proxy_Port">33005</entry>
+    <entry key="Proxy_IP">127.0.0.1</entry>
+    <entry key="Proxy_Plugins">Proxy</entry>
+    
+    <entry key="DB_Port">3306</entry>
+    <entry key="DB_IP">127.0.0.1</entry>
+    
+    
+    <entry key="Social_Port">33006</entry>
+    
+    <entry key="Notification_Port">33008</entry>
+    
+    <entry key="Dengue_Port">33009</entry>
+    
+    <entry key="Incident_Message">Incident Report : %s at %s. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
+    
+    <entry key="Haze_Message">Haze Report : National PSI at %s , Air quality %s. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
+    
+    <entry key="Dengue_Message">Dengue Report : %s red zone, %s yellow zone. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
 </properties>

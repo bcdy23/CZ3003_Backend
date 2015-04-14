@@ -1,5 +1,6 @@
 package DBProxy.Plugins.proxy;
 
+import DBProxy.Core.CMySQLSocket;
 import DBProxy.Core.Engine;
 import DBProxy.MySQL.Protocol.Com_Initdb;
 import DBProxy.MySQL.Protocol.Com_Query;
@@ -16,8 +17,13 @@ import java.io.OutputStream;
 import java.io.BufferedInputStream;
 import org.apache.log4j.Logger;
 import DBProxy.Plugins.Base;
+import Publisher.CPublisherManager;
+import Settings.CSettingManager;
+import java.util.regex.Pattern;
 
 public class Proxy extends Base {
+    
+    public Pattern regUpdateIncident = Pattern.compile("UPDATE Incident [a-zA-Z0-9]* incidentStatus = \'On-going\' [a-zA-Z0-9]*");
 
     public Logger logger = Logger.getLogger("Plugin.Proxy");
 
@@ -31,16 +37,16 @@ public class Proxy extends Base {
     public void init(Engine context) throws IOException, UnknownHostException {
         this.logger.trace("init");
 
+        mysqlHost = CSettingManager.getSetting("DB_IP");
+        mysqlPort = CSettingManager.getIntSetting("DB_Port");
+
         // Connect to the mysql server on the other side
-        this.mysqlSocket = new Socket(this.mysqlHost, this.mysqlPort);
-        this.mysqlSocket.setPerformancePreferences(0, 2, 1);
-        this.mysqlSocket.setTcpNoDelay(true);
-        this.mysqlSocket.setTrafficClass(0x10);
-        this.mysqlSocket.setKeepAlive(true);
+        this.mysqlSocket = new CMySQLSocket(this.mysqlHost, this.mysqlPort);
 
         this.logger.info("Connected to mysql server at " + this.mysqlHost + ":" + this.mysqlPort);
         this.mysqlIn = new BufferedInputStream(this.mysqlSocket.getInputStream(), 16384);
         this.mysqlOut = this.mysqlSocket.getOutputStream();
+
     }
 
     public void read_handshake(Engine context) throws IOException {
@@ -112,8 +118,6 @@ public class Proxy extends Base {
         this.logger.trace("read_query");
         context.bufferResultSet = false;
 
-        System.out.println(context.query);
-
         byte[] packet = Packet.read_packet(context.clientIn);
         context.buffer.add(packet);
 
@@ -166,10 +170,18 @@ public class Proxy extends Base {
                 context.buffer = Packet.read_full_result_set(this.mysqlIn, context.clientOut, context.buffer, context.bufferResultSet);
                 break;
         }
+        
+        if (this.regUpdateIncident.matcher(context.query).find()) {
+            
+            CPublisherManager.publishOngoingIncident(context.query);
+            
+        }
+
     }
 
     public void send_query_result(Engine context) throws IOException {
         this.logger.trace("send_query_result");
+
         Packet.write(context.clientOut, context.buffer);
         context.clear_buffer();
     }

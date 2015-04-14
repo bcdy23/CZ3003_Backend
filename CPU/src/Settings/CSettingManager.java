@@ -17,7 +17,7 @@ public class CSettingManager {
 
     private static Properties objProperties = null;
 
-    private static final String strPropertyPath = "Properties/properties.xml";
+    private static final String strPropertyPath = "setting/Settings.xml";
 
     private CSettingManager() {
     }

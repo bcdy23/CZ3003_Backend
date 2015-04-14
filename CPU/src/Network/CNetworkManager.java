@@ -5,6 +5,10 @@
  */
 package Network;
 
+import Network.DBProxy.CProxyHandler;
+import Network.Dengue.CDengueHandler;
+import Network.Notification.CNotificationHandler;
+import Settings.CSettingManager;
 import java.io.IOException;
 
 /**
@@ -23,11 +27,58 @@ public class CNetworkManager {
             System.out.println("");
             return;
         }
-        
+
         objDefaultSocket.addObserver(new CDefaultHandler());
-        
+
         objDefaultSocket.run();
-        
+
     }
 
+    public static void createProxyListener() {
+
+        CSocket objProxySocket;
+
+        try {
+            objProxySocket = new CSocket(CSettingManager.getIntSetting("Proxy_Port"));
+        } catch (IOException ex) {
+            System.out.println("");
+            return;
+        }
+
+        objProxySocket.addObserver(new CProxyHandler());
+
+        objProxySocket.run();
+
+    }
+
+    public static void createNotificationListener() {
+        CSocket objProxySocket;
+
+        try {
+            objProxySocket = new CSocket(CSettingManager.getIntSetting("Notification_Port"));
+        } catch (IOException ex) {
+            System.out.println("");
+            return;
+        }
+
+        objProxySocket.addObserver(new CNotificationHandler());
+
+        objProxySocket.run();
+    }
+
+    public static void createDengueListener() {
+
+        CSocket objDefaultSocket;
+
+        try {
+            objDefaultSocket = new CSocket(CSettingManager.getIntSetting("Dengue_Port"));
+        } catch (IOException ex) {
+            System.out.println(ex);
+            return;
+        }
+        objDefaultSocket.addObserver(new CDengueHandler());
+
+        objDefaultSocket.run();
+
+    }
 }
