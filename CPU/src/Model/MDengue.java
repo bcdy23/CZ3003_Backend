@@ -48,7 +48,7 @@ public class MDengue {
 
     public void addCluster(String pStrString) throws ParseException {
 
-        IDataStorage objDS = CDataStorageFactory.getDataStorage();
+        IDataStorage objDS = CDataStorageFactory.getMasterStorage();
 
         StringBuilder objSB = new StringBuilder();
         objSB.append("INSERT INTO `dengue`(`polygon`, `region`, `noOfPeopleInfected`, `severity`)"
