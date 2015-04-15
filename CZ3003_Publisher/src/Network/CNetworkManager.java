@@ -30,8 +30,7 @@ public class CNetworkManager {
 
     }
 
-    
-      public static void createSMSListener() {
+    public static void createSMSListener() {
 
         CSocket objDefaultSocket;
 
@@ -43,6 +42,23 @@ public class CNetworkManager {
         }
 
         objDefaultSocket.addObserver(new CSMSHandler());
+
+        objDefaultSocket.run();
+
+    }
+
+    public static void createEmailListener() {
+
+        CSocket objDefaultSocket;
+
+        try {
+            objDefaultSocket = new CSocket(33011);
+        } catch (IOException ex) {
+            System.out.println("");
+            return;
+        }
+
+        objDefaultSocket.addObserver(new CEmailHandler());
 
         objDefaultSocket.run();
 
