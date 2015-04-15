@@ -55,18 +55,40 @@ public class CHazeManager {
             return;
         }
 
-        JSONObject objJson = XML.toJSONObject(strOutput);
-
-
+        JSONArray aryRegions = XML.toJSONObject(
+                strOutput
+        ).getJSONObject("channel")
+                .getJSONObject("item")
+                .getJSONArray("region");
 
         StringBuilder objSB = new StringBuilder();
-
         objSB.append("[");
 
-       /* for (CDengueCluster objCluster : lstCluster) {
-            objSB.append(objCluster.toJSON());
-            objSB.append(",");
-        }*/
+        for (int i = 0; i < aryRegions.length(); i++) {
+
+            objSB.append("{\"region\" : ");
+
+            JSONObject objRegion = (JSONObject) aryRegions.get(i);
+
+            objSB.append("\"");
+            objSB.append(objRegion.getString("id"));
+            objSB.append("\",");
+
+            JSONArray aryReadings = objRegion.getJSONObject("record").getJSONArray("reading");
+
+            for (int x = 0; x < aryReadings.length(); x++) {
+
+                JSONObject objReading = (JSONObject) aryReadings.get(x);
+
+                if (objReading.getString("type").equalsIgnoreCase("NPSI")) {
+
+                    objSB.append("\"psi\" : ");
+                    objSB.append(objReading.getInt("value"));
+                    objSB.append("},");
+                }
+
+            }
+        }
 
         objSB.deleteCharAt(objSB.lastIndexOf(","));
 

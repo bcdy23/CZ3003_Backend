@@ -6,7 +6,7 @@
 package CZ3003_Subscriber;
 
 import Dengue.CDengueManager;
-
+import Haze.CHazeManager;
 
 /**
  *
@@ -21,6 +21,7 @@ public class Main {
         // TODO code application logic here
 
         CDengueManager.schedulePolling();
+        CHazeManager.schedulePolling();
 
     }
 
