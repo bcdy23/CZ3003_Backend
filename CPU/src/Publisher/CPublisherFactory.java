@@ -23,4 +23,8 @@ public class CPublisherFactory {
         return new CPublisher(InetAddress.getByName("127.0.0.1"), CSettingManager.getIntSetting("SMS_Port"));
     }
 
+    public static CPublisher getEmailPublisher() throws UnknownHostException {
+        return new CPublisher(InetAddress.getByName("127.0.0.1"), CSettingManager.getIntSetting("Email_Port"));
+    }
+
 }

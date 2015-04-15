@@ -34,7 +34,6 @@ public class CPU {
             CNetworkManager.createProxyListener();
         }).start();
 
-        //CPublisherManager.publishHaze();
 
     }
 

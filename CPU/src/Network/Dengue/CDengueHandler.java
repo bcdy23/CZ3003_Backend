@@ -44,7 +44,6 @@ public class CDengueHandler implements Observer {
 
             CNotificationManager.notifiyDengue();
             CPublisherManager.publishDengue();
-            CPublisherManager.publishHaze();
             
         } catch (IOException | ParseException ex) {
             System.out.println(ex);

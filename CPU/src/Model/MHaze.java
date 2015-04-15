@@ -45,42 +45,76 @@ public class MHaze {
     }
 
     public void addHazeInfo(String pStrString) throws ParseException {
-      IDataStorage objDS = CDataStorageFactory.getMasterStorage();
+        IDataStorage objDS = CDataStorageFactory.getMasterStorage();
 
         StringBuilder objSB = new StringBuilder();
-        objSB.append("INSERT INTO `dengue`(`polygon`, `region`, `noOfPeopleInfected`, `severity`)"
-                + "VALUES ");
+
+        objSB.append("INSERT INTO `haze`(`region`, `psiValue`, `airQualityDescriptor`)"
+                + " VALUES");
 
         JSONParser jsonParser = new JSONParser();
 
         JSONArray aryJSON = (JSONArray) jsonParser.parse(pStrString);
 
         for (Object objJson : aryJSON) {
+
             objSB.append("('");
             JSONObject objInnerObj = (JSONObject) objJson;
 
-            objSB.append(objInnerObj.get("XYs").toString());
-            objSB.append("','");
+            int intPsi = Integer.parseInt(objInnerObj.get("psi").toString());
+            String strRegionCode = objInnerObj.get("region").toString();
 
-            objSB.append(objInnerObj.get("Location").toString());
-            objSB.append("','");
+            switch (strRegionCode.toUpperCase()) {
+                case "RNO":
+                    objSB.append("North");
+                    objSB.append("',");
+                    break;
+                case "RSO":
+                    objSB.append("South");
+                    objSB.append("',");
+                    break;
+                case "RCE":
+                    objSB.append("Central");
+                    objSB.append("',");
+                    break;
+                case "RWE":
+                    objSB.append("West");
+                    objSB.append("',");
+                    break;
+                case "REA":
+                    objSB.append("East");
+                    objSB.append("',");
+                    break;
+                default:
+                    objSB.append("National");
+                    objSB.append("',");
+                    break;
 
-            objSB.append(objInnerObj.get("Cases").toString());
-            objSB.append("','");
-
-            if (Integer.parseInt(objInnerObj.get("Cases").toString()) < 10) {
-                objSB.append("warning'),");
-            } else {
-                objSB.append("alert'),");
             }
-        }
 
+            objSB.append(intPsi);
+            objSB.append(",'");
+
+            if (intPsi <= 50) {
+                objSB.append("Good");
+            } else if (intPsi <= 100) {
+                objSB.append("Moderate");
+            } else if (intPsi <= 200) {
+                objSB.append("Unhealthy");
+            } else if (intPsi <= 300) {
+                objSB.append("Very unhealthy");
+            } else {
+                objSB.append("Hazardous");
+            }
+            objSB.append("'),");
+
+        }
         objSB.deleteCharAt(objSB.lastIndexOf(","));
 
         objSB.append(";");
-        
+
         System.out.println(objSB);
-        
+
         objDS.openConnection();
 
         objDS.executeScalar("truncate table haze");

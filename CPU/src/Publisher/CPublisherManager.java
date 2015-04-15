@@ -33,6 +33,19 @@ public class CPublisherManager {
             + "    ]\n"
             + "}";
 
+    private static final String strEmailMsg = "{"
+            + "    \"id\": %s,\n"
+            + "    \"messagesToBeSent\": [\n"
+            + "        {\n"
+            + "            \"messageText\": \"%s\",\n"
+            + "            \"recipients\": \"%s\",\n"
+            + "            \"subject\": \"%s\",\n"
+            + "            \"from\": \"cz3003timecrisis@gmail.com\",\n"
+            + "            \"priority\": %d\n"
+            + "        }\n"
+            + "    ]\n"
+            + "}";
+
     private static void sendToSocial(String pStrMsg) throws UnknownHostException {
         CPublisherFactory.getSocialPublisher().sendMessage(String.format(strSocialMsg, "%d", pStrMsg));
     }
@@ -41,9 +54,12 @@ public class CPublisherManager {
         CPublisherFactory.getSMSPublisher().sendMessage(String.format(strSMSMsg, "%d", "+6591544288", pStrMsg));
     }
 
+    private static void sendToEmail(String pStrMsg, String pStrRecipients, String pStrSubj, int intPriority) throws UnknownHostException {
+        CPublisherFactory.getEmailPublisher().sendMessage(String.format(strEmailMsg, "%d", pStrMsg, pStrRecipients, pStrSubj, intPriority));
+    }
+
     public static void publishOngoingIncident(String pStrQuery) {
 
-        //"UPDATE Incident SET incidentStatus = 'On-going' , staffID = 3 WHERE incidentID = 22"
         int intId = Integer.parseInt(pStrQuery.trim().split("WHERE incidentID = ")[1]);
 
         try {
@@ -55,6 +71,8 @@ public class CPublisherManager {
 
             sendToSocial(strMsg);
             sendToSMS(strMsg);
+
+            sendToEmail(strMsg, "brydencho91@hotmail.com,bcho002@e.ntu.edu.sg", "Incident Report", 1);
 
         } catch (SQLException | UnknownHostException ex) {
         }
@@ -72,6 +90,7 @@ public class CPublisherManager {
 
             sendToSocial(strMsg);
             sendToSMS(strMsg);
+            sendToEmail(strMsg, "brydencho91@hotmail.com,bcho002@e.ntu.edu.sg", "Haze Report", 2);
 
         } catch (SQLException | UnknownHostException ex) {
         }
@@ -88,6 +107,8 @@ public class CPublisherManager {
 
             sendToSocial(strMsg);
             sendToSMS(strMsg);
+
+            sendToEmail(strMsg, "brydencho91@hotmail.com,bcho002@e.ntu.edu.sg", "Dengue Report", 2);
 
         } catch (SQLException | UnknownHostException ex) {
         }

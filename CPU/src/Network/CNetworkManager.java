@@ -7,6 +7,7 @@ package Network;
 
 import Network.DBProxy.CProxyHandler;
 import Network.Dengue.CDengueHandler;
+import Network.Haze.CHazeHandler;
 import Network.Notification.CNotificationHandler;
 import Settings.CSettingManager;
 import java.io.IOException;
@@ -91,7 +92,7 @@ public class CNetworkManager {
             System.out.println(ex);
             return;
         }
-       // objDefaultSocket.addObserver(new CHazeHandler());
+        objDefaultSocket.addObserver(new CHazeHandler());
 
         objDefaultSocket.run();
     }
