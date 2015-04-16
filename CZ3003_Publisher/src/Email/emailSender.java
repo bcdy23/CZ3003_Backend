@@ -75,27 +75,25 @@ public class emailSender {
 //        System.out.println(messagesToSend);
     }
 
-    public static void dispatchEmail() {
+    public synchronized static void dispatchEmail() {
 
         for (Integer intKey : messagesToSend.keySet()) {
             for (int j = 0; j < messagesToSend.get(intKey).size(); j++) {
 
-                synchronized (messagesToSend) {
-                    MessageToSend m = messagesToSend.get(intKey).get(j);
-                    String from = m.from;
-                    String recipients = m.recipients;
-                    String subject = m.subject;
-                    String messageText = m.messageText;
-                    int priority = m.priority;
-                    try {
-                        sendEmail(from, recipients, subject, messageText, priority);
+                MessageToSend m = messagesToSend.get(intKey).get(j);
+                String from = m.from;
+                String recipients = m.recipients;
+                String subject = m.subject;
+                String messageText = m.messageText;
+                int priority = m.priority;
+                try {
+                    sendEmail(from, recipients, subject, messageText, priority);
 
-                        messagesToSend.get(intKey).remove(j);
-                    } catch (MessagingException ex) {
-                    }
+                    messagesToSend.get(intKey).remove(j);
+                } catch (MessagingException ex) {
                 }
-
             }
+
         }
 
     }
