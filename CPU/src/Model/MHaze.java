@@ -66,27 +66,27 @@ public class MHaze {
 
             switch (strRegionCode.toUpperCase()) {
                 case "RNO":
-                    objSB.append("North");
+                    objSB.append("north");
                     objSB.append("',");
                     break;
                 case "RSO":
-                    objSB.append("South");
+                    objSB.append("south");
                     objSB.append("',");
                     break;
                 case "RCE":
-                    objSB.append("Central");
+                    objSB.append("central");
                     objSB.append("',");
                     break;
                 case "RWE":
-                    objSB.append("West");
+                    objSB.append("west");
                     objSB.append("',");
                     break;
                 case "REA":
-                    objSB.append("East");
+                    objSB.append("east");
                     objSB.append("',");
                     break;
                 default:
-                    objSB.append("National");
+                    objSB.append("national");
                     objSB.append("',");
                     break;
 
@@ -117,7 +117,7 @@ public class MHaze {
 
         objDS.openConnection();
 
-        objDS.executeScalar("truncate table haze");
+        objDS.executeScalar("truncate table haze;");
         objDS.executeScalar(objSB.toString());
 
         objDS.closeConnection();

@@ -51,6 +51,7 @@ public class CSettingManager {
     }
 
     public static int getIntSetting(String pStrName) {
+
         return Integer.parseInt(getSetting(pStrName));
     }
 

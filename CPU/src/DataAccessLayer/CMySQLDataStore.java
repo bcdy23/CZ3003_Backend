@@ -6,6 +6,7 @@
 package DataAccessLayer;
 
 import DataAccessLayer.Base.IDataStorage;
+import Settings.CSettingManager;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -25,15 +26,16 @@ public class CMySQLDataStore implements IDataStorage {
     /**
      * Uses JDBC connection pooling to initialise data source
      */
-    public CMySQLDataStore(String Sname, int Pnumber, String User, String Pwd, String dbName) {
-
+    public CMySQLDataStore(String Sname, int Pnumber) {
+        
         MysqlDataSource objDs = new MysqlDataSource();
 
         objDs.setServerName(Sname);
         objDs.setPortNumber(Pnumber);
-        objDs.setUser(User);
-        objDs.setPassword(Pwd);
-        objDs.setDatabaseName(dbName);
+                
+        objDs.setUser(CSettingManager.getSetting("DB_User"));
+        objDs.setPassword(CSettingManager.getSetting("DB_Pwd"));
+        objDs.setDatabaseName(CSettingManager.getSetting("DB_Database"));
 
         ds = objDs;
 

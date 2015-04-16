@@ -8,8 +8,14 @@
     <entry key="Proxy_IP">127.0.0.1</entry>
     <entry key="Proxy_Plugins">Proxy</entry>
     
-    <entry key="DB_Port">3306</entry>
-    <entry key="DB_IP">127.0.0.1</entry>
+    <!--<entry key="DB_Master_IP">172.22.248.227</entry>-->
+    <entry key="DB_Master_IP">127.0.0.1</entry>
+    
+    <entry key="DB_Slave_IP">127.0.0.1</entry>
+    
+    <entry key="DB_Database">cz3003master</entry>
+    <entry key="DB_User">cz3003Master</entry>
+    <entry key="DB_Pwd">admin</entry>
     
     <entry key="Social_Port">33006</entry>
         
@@ -22,6 +28,8 @@
     <entry key="Haze_Port">33010</entry>
     
     <entry key="Email_Port">33011</entry>
+    
+    <entry key="Report_Port">33012</entry>
     
     <entry key="Incident_Message">Incident Report : %s at %s. Visit http://cz3003backend-cz3003master.rhcloud.com/ for more info</entry>
     

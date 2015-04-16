@@ -22,8 +22,10 @@ import Settings.CSettingManager;
 import java.util.regex.Pattern;
 
 public class Proxy extends Base {
-    
+
     public Pattern regUpdateIncident = Pattern.compile("UPDATE Incident [a-zA-Z0-9]* incidentStatus = \'On-going\' [a-zA-Z0-9]*");
+
+    public Pattern regInsertIncident = Pattern.compile("INSERT INTO Incident [a-zA-Z0-9]* incidentStatus = \'On-going\' [a-zA-Z0-9]*");
 
     public Logger logger = Logger.getLogger("Plugin.Proxy");
 
@@ -37,8 +39,8 @@ public class Proxy extends Base {
     public void init(Engine context) throws IOException, UnknownHostException {
         this.logger.trace("init");
 
-        mysqlHost = CSettingManager.getSetting("DB_IP");
-        mysqlPort = CSettingManager.getIntSetting("DB_Port");
+        mysqlHost = CSettingManager.getSetting("DB_Master_IP");
+        mysqlPort = CSettingManager.getIntSetting("DB_Master_Port");
 
         // Connect to the mysql server on the other side
         this.mysqlSocket = new CMySQLSocket(this.mysqlHost, this.mysqlPort);
@@ -170,11 +172,11 @@ public class Proxy extends Base {
                 context.buffer = Packet.read_full_result_set(this.mysqlIn, context.clientOut, context.buffer, context.bufferResultSet);
                 break;
         }
-        
+
         if (this.regUpdateIncident.matcher(context.query).find()) {
-            
             CPublisherManager.publishOngoingIncident(context.query);
-            
+        } else if (this.regInsertIncident.matcher(context.query).find()) {
+            CPublisherManager.publishOngoingIncident(context.query);
         }
 
     }

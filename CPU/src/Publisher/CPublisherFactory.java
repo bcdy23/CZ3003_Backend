@@ -27,4 +27,9 @@ public class CPublisherFactory {
         return new CPublisher(InetAddress.getByName("127.0.0.1"), CSettingManager.getIntSetting("Email_Port"));
     }
 
+    public static CPublisher getReportPublisher() throws UnknownHostException {
+        return new CPublisher(InetAddress.getByName("127.0.0.1"), CSettingManager.getIntSetting("Report_Port"));
+    }
+    
+
 }

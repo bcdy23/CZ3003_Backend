@@ -4,8 +4,9 @@
  * and open the template in the editor.
  */
 package DataAccessLayer;
+
 import DataAccessLayer.Base.IDataStorage;
-import java.util.HashMap;
+import Settings.CSettingManager;
 
 /**
  *
@@ -13,32 +14,26 @@ import java.util.HashMap;
  */
 public class CDataStorageFactory {
 
-    private static final HashMap<String, IDataStorage> hmDBServers = new HashMap<>();
-   
-    
+    private static final int intClusterSize = 2;
+
     private CDataStorageFactory() {
 
     }
 
-     static {
-        if (hmDBServers.isEmpty()) {
-            hmDBServers.put("MASTER", new CMySQLDataStore("127.0.0.1",3306,"cz3003Master","admin","cz3003_proxy"));
-           // hmDBServers.put("SLAVE1", new CMySQLDataStore("172.22.218.155",3306,"cz3003Master","admin","cz3003master"));
-        }
-    }
-
     public static IDataStorage getDataStorage() {
+
+        int intDB = (int) (Math.random() * intClusterSize);
         
-            int intDB = (int) (Math.random() * hmDBServers.size());
-                        
-            return (IDataStorage) hmDBServers.values().toArray()[intDB];
-        
+        if (intDB == 0) {
+            return new CMySQLDataStore(CSettingManager.getSetting("DB_Master_IP"), 3306);
+        } else {
+            return new CMySQLDataStore(CSettingManager.getSetting("DB_Slave_IP"), 3306);
+        }
     }
 
     public static IDataStorage getMasterStorage() {
 
-        
-        return hmDBServers.get("MASTER");
+        return new CMySQLDataStore(CSettingManager.getSetting("DB_Master_IP"), 3306);
 
     }
 }

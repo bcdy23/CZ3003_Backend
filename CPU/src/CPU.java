@@ -34,6 +34,9 @@ public class CPU {
             CNetworkManager.createProxyListener();
         }).start();
 
+        new Thread(() -> {
+            CPublisherManager.createReportSender();
+        }).start();
 
     }
 
