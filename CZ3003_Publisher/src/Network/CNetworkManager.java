@@ -63,4 +63,21 @@ public class CNetworkManager {
         objDefaultSocket.run();
 
     }
+
+    public static void createReportListener() {
+
+        CSocket objDefaultSocket;
+
+        try {
+            objDefaultSocket = new CSocket(33012);
+        } catch (IOException ex) {
+            System.out.println(ex);
+            return;
+        }
+
+        objDefaultSocket.addObserver(new CReportHandler());
+
+        objDefaultSocket.run();
+
+    }
 }

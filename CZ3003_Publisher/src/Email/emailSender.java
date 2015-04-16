@@ -73,7 +73,7 @@ public class emailSender {
         for (Integer intKey : messagesToSend.keySet()) {
             for (int j = 0; j < messagesToSend.get(intKey).size(); j++) {
 
-                synchronized (messagesToSend.get(intKey)) {
+                synchronized (messagesToSend) {
                     MessageToSend m = messagesToSend.get(intKey).get(j);
                     String from = m.from;
                     String recipients = m.recipients;

@@ -27,5 +27,9 @@ public class CZ3003_Twitter {
             CNetworkManager.createEmailListener();
         }).start();
 
+        new Thread(() -> {
+//            CNetworkManager.createReportListener();
+        }).start();
+
     }
 }
