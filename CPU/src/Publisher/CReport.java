@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -30,14 +28,30 @@ public class CReport {
 
     public static String genReport(JSONArray pObjAry) throws IOException, COSVisitorException {
 
-        List<List<String>> lstContents = new ArrayList<>();
+        List<List<String>> lstIncidentContents = new ArrayList<>();
+        List<List<String>> lstHaze = new ArrayList<>();
+        List<List<String>> lstDengue = new ArrayList<>();
 
         List<String> aryLst = new ArrayList<>();
 
         aryLst.add("Incident Type");
         aryLst.add("Percentage");
 
-        lstContents.add(aryLst);
+        lstIncidentContents.add(aryLst);
+
+        List<String> aryHazeHeader = new ArrayList<>();
+
+        aryHazeHeader.add("Region");
+        aryHazeHeader.add("PSI");
+
+        lstHaze.add(aryHazeHeader);
+
+        List<String> aryDengueHeader = new ArrayList<>();
+
+        aryDengueHeader.add("Zones");
+        aryDengueHeader.add("Count");
+
+        lstDengue.add(aryDengueHeader);
 
         for (Object obj : pObjAry) {
             JSONObject objJson = (JSONObject) obj;
@@ -46,15 +60,41 @@ public class CReport {
 
             while (keys.hasNext()) {
                 String key = (String) keys.next();
-                // loop to get the dynamic key
-                String value = objJson.get(key) + "%";
+
+                if (key.equalsIgnoreCase("type")) {
+                    continue;
+                }
+
+                String value = objJson.get(key) + "";
 
                 List<String> aryValues = new ArrayList<>();
 
-                aryValues.add(key);
-                aryValues.add(value);
+                switch (objJson.get("Type").toString().toUpperCase()) {
+                    case "STATS":
+                        aryValues.add(key);
+                        aryValues.add(value + "%");
+                        lstIncidentContents.add(aryValues);
+                        break;
+                    case "HAZE":
+                        aryValues.add(key + " Area");
+                        aryValues.add(value);
+                        lstHaze.add(aryValues);
+                        break;
+                    case "DENGUE":
 
-                lstContents.add(aryValues);
+                        switch (key.toUpperCase()) {
+                            case "ALERT":
+                                aryValues.add("Red Zone");
+                                break;
+                            default:
+                                aryValues.add("Yellow Zone");
+                                break;
+                        }
+
+                        aryValues.add(value);
+                        lstDengue.add(aryValues);
+                        break;
+                }
             }
 
         }
@@ -74,24 +114,42 @@ public class CReport {
                 contentStream.beginText();
                 contentStream.setFont(font, 20);
                 contentStream.moveTextPositionByAmount(70, 720);
-                contentStream.drawString("Incident Summary " + new Date());
+                contentStream.drawString("Incident Summary (" + new Date() + ")");
                 contentStream.endText();
 
                 contentStream.beginText();
-                contentStream.setFont(font, 20);
+                contentStream.setFont(font, 18);
                 contentStream.moveTextPositionByAmount(100, 670);
-                contentStream.drawString("Statistics");
+                contentStream.drawString("Incident Statistics");
                 contentStream.endText();
 
-                drawTable(page, contentStream, 650, 100, lstContents);
+                contentStream.beginText();
+                contentStream.setFont(font, 18);
+                contentStream.moveTextPositionByAmount(100, 500);
+                contentStream.drawString("Haze Statistics");
+                contentStream.endText();
+
+                contentStream.beginText();
+                contentStream.setFont(font, 18);
+                contentStream.moveTextPositionByAmount(100, 300);
+                contentStream.drawString("Dengue Statistics");
+                contentStream.endText();
+
+                drawTable(page, contentStream, 650, 100, lstIncidentContents);
+
+                drawTable(page, contentStream, 480, 100, lstHaze);
+
+                drawTable(page, contentStream, 280, 100, lstDengue);
 
 // Make sure that the content stream is closed:
             }
 
-// Save the results and ensure that the document is properly closed:
-            document.save("Report.pdf");
+            String strFileName = new Date().getTime() + ".pdf";
 
-            return Paths.get("Report.pdf").toAbsolutePath().toString();
+// Save the results and ensure that the document is properly closed:
+            document.save(strFileName);
+
+            return Paths.get(strFileName).toAbsolutePath().toString();
 
         }
 

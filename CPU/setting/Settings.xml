@@ -13,7 +13,7 @@
     
     <entry key="DB_Slave_IP">127.0.0.1</entry>
     
-    <entry key="DB_Database">cz3003master</entry>
+    <entry key="DB_Database">cz3003_proxy</entry>
     <entry key="DB_User">cz3003Master</entry>
     <entry key="DB_Pwd">admin</entry>
     

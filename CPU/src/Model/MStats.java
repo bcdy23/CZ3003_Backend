@@ -24,10 +24,15 @@ public class MStats {
 
         objDS.openConnection();
 
-        String strQuery = "SELECT incidentCategoryTitle, percentage \n"
+        String strQuery = "SELECT incidentCategoryTitle, percentage , 'Stats'\n"
                 + "FROM `incidentcategorystat` s\n"
                 + "inner join `incidentcategory` c\n"
-                + "on s.incidentCategoryId = c.incidentCategoryId";
+                + "on s.incidentCategoryId = c.incidentCategoryId\n"
+                + "union all\n"
+                + "SELECT region,psiValue ,'Haze' FROM `haze`\n"
+                + "union all\n"
+                + "SELECT severity,count(*),'Dengue' FROM `dengue`\n"
+                + "group by severity;";
 
         ResultSet objRs = objDS.executeQuery(strQuery);
 
@@ -39,6 +44,14 @@ public class MStats {
             objSB.append("\" : ");
 
             objSB.append(objRs.getString(2));
+
+            objSB.append(",");
+
+            objSB.append("\"Type\" : \"");
+
+            objSB.append(objRs.getString(3));
+
+            objSB.append("\"");
 
             objSB.append("},");
 

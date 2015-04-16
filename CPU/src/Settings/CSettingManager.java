@@ -15,25 +15,24 @@ import java.util.Properties;
  */
 public class CSettingManager {
 
-    private static Properties objProperties = null;
+    private static final Properties objProperties = new Properties();
 
     private static final String strPropertyPath = "setting/Settings.xml";
 
     private CSettingManager() {
     }
 
-    public static Properties getPropertiesFile() {
-
-        if (objProperties == null) {
-            objProperties = new Properties();
-            try {
-                objProperties.loadFromXML(CFileFactory.getFile_InputStream(strPropertyPath));
-            } catch (IOException ex) {
-                System.out.println("Unable to load properties file");
-                System.out.println(ex);
-                System.exit(0);
-            }
+    static {
+        try {
+            objProperties.loadFromXML(CFileFactory.getFile_InputStream(strPropertyPath));
+        } catch (IOException ex) {
+            System.out.println("Unable to load properties file");
+            System.out.println(ex);
+            System.exit(0);
         }
+    }
+
+    public static Properties getPropertiesFile() {
 
         return objProperties;
 

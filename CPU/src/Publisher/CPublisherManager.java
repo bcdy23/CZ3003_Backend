@@ -84,13 +84,13 @@ public class CPublisherManager {
 
         JSONParser jsonParser = new JSONParser();
 
-        JSONObject objJSON = (JSONObject) jsonParser.parse(String.format(strReportMsg, "c130152@e.ntu.edu.sg", pStrMsg));
+        JSONObject objJSON = (JSONObject) jsonParser.parse(String.format(strReportMsg, "c130152@e.ntu.edu.sg,bcho002@e.ntu.edu.sg,benj0017@e.ntu.edu.sg", pStrMsg));
 
         //int intTempSeq = Integer.parseInt(objJSON.get("id").toString());
         String strPath = CReport.genReport((JSONArray) objJSON.get("stats"));
 
-        CPublisherFactory.getEmailPublisher().sendMessage(String.format(strEmailMsg, "%d", strPath, "c130152@e.ntu.edu.sg", "Report", 1));
-
+     //   CPublisherFactory.getEmailPublisher().sendMessage(
+        //          String.format(strEmailMsg, "%d", strPath, "c130152@e.ntu.edu.sg,bcho002@e.ntu.edu.sg,benj0017@e.ntu.edu.sg", "Report", 1));
         // CPublisherFactory.getReportPublisher().sendMessage(String.format(strReportMsg, "%d", "c130152@e.ntu.edu.sg", pStrMsg));
     }
 
@@ -152,7 +152,7 @@ public class CPublisherManager {
 
     public static void publishReport() {
         try {
-            
+
             String strMsg = new MStats().getStats();
 
             sendToReport(strMsg);

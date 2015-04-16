@@ -23,7 +23,7 @@ public class CDataStorageFactory {
     public static IDataStorage getDataStorage() {
 
         int intDB = (int) (Math.random() * intClusterSize);
-        
+
         if (intDB == 0) {
             return new CMySQLDataStore(CSettingManager.getSetting("DB_Master_IP"), 3306);
         } else {
