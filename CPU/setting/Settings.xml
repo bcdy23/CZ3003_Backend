@@ -10,8 +10,10 @@
     
     <!--<entry key="DB_Master_IP">172.22.248.227</entry>-->
     <entry key="DB_Master_IP">127.0.0.1</entry>
+    <entry key="DB_Master_Port">3306</entry>
     
     <entry key="DB_Slave_IP">127.0.0.1</entry>
+    <entry key="DB_Slave_Port">3306</entry>
     
     <entry key="DB_Database">cz3003_proxy</entry>
     <entry key="DB_User">cz3003Master</entry>

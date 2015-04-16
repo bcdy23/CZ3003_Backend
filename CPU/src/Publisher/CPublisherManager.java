@@ -11,18 +11,17 @@ import Model.MIncident;
 import Model.MStats;
 import Notification.CNotificationManager;
 import Settings.CSettingManager;
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.apache.pdfbox.exceptions.COSVisitorException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -67,12 +66,18 @@ public class CPublisherManager {
             + "    ]\n"
             + "}";
 
+    private static final String strMailingList = "bcho002@e.ntu.edu.sg";
+
+    //private static final String strMailingList = "brydencho91@hotmail.com,,";
+    // private static final String strSMSList = "+6591544288;";
+    private static final String strSMSList = "+6591544288";
+
     private static void sendToSocial(String pStrMsg) throws UnknownHostException {
         CPublisherFactory.getSocialPublisher().sendMessage(String.format(strSocialMsg, "%d", pStrMsg));
     }
 
     private static void sendToSMS(String pStrMsg) throws UnknownHostException {
-        CPublisherFactory.getSMSPublisher().sendMessage(String.format(strSMSMsg, "%d", "+6591544288;+6598733453", pStrMsg));
+        CPublisherFactory.getSMSPublisher().sendMessage(String.format(strSMSMsg, "%d", strSMSList, pStrMsg));
     }
 
     private static void sendToEmail(String pStrMsg, String pStrRecipients, String pStrSubj, int intPriority) throws UnknownHostException {
@@ -84,33 +89,56 @@ public class CPublisherManager {
 
         JSONParser jsonParser = new JSONParser();
 
-        JSONObject objJSON = (JSONObject) jsonParser.parse(String.format(strReportMsg, "c130152@e.ntu.edu.sg,bcho002@e.ntu.edu.sg,benj0017@e.ntu.edu.sg", pStrMsg));
+        JSONObject objJSON = (JSONObject) jsonParser.parse(String.format(strReportMsg, "", pStrMsg));
 
         //int intTempSeq = Integer.parseInt(objJSON.get("id").toString());
         String strPath = CReport.genReport((JSONArray) objJSON.get("stats"));
 
-     //   CPublisherFactory.getEmailPublisher().sendMessage(
-        //          String.format(strEmailMsg, "%d", strPath, "c130152@e.ntu.edu.sg,bcho002@e.ntu.edu.sg,benj0017@e.ntu.edu.sg", "Report", 1));
+        CPublisherFactory.getEmailPublisher().sendMessage(
+                String.format(strEmailMsg, "%d", strPath, "c130152@e.ntu.edu.sg,bcho002@e.ntu.edu.sg", "Report", 1));
+
         // CPublisherFactory.getReportPublisher().sendMessage(String.format(strReportMsg, "%d", "c130152@e.ntu.edu.sg", pStrMsg));
     }
 
     public static void publishOngoingIncident(String pStrQuery) {
 
-        int intId = Integer.parseInt(pStrQuery.trim().split("WHERE incidentID = ")[1]);
+        String strMsg = "";
+
+        if (pStrQuery.startsWith("UPDATE")) {
+
+            int intId = Integer.parseInt(pStrQuery.trim().split("incidentID = ")[1].split(",")[0].trim());
+
+            try {
+                HashMap<String, String> objHM = new MIncident().loadIncidentInfo(intId);
+
+                strMsg = String.format(CSettingManager.getSetting("Incident_Message"), objHM.get("Title"), objHM.get("Address"));
+
+            } catch (SQLException ex) {
+            }
+        } else if (pStrQuery.startsWith("INSERT")) {
+
+            String intId = pStrQuery.split("VALUES")[1].split(",")[2];
+
+            String strTitle;
+            try {
+                strTitle = new MIncident().loadIncidentCategory(intId);
+
+                strMsg = String.format(CSettingManager.getSetting("Incident_Message"),
+                        strTitle, pStrQuery.split("VALUES")[1].split(",")[6].replaceAll("'", "").trim());
+            } catch (SQLException ex) {
+            }
+
+        }
 
         try {
-            HashMap<String, String> objHM = new MIncident().loadIncidentInfo(intId);
-
-            String strMsg = String.format(CSettingManager.getSetting("Incident_Message"), objHM.get("Title"), objHM.get("Address"));
-
             CNotificationManager.notifiyOngoingIncident();
 
             sendToSocial(strMsg);
             sendToSMS(strMsg);
 
-            sendToEmail(strMsg, "brydencho91@hotmail.com,benj0017@e.ntu.edu.sg,junyi.hjy@gmail.com", "Incident Report", 1);
+            sendToEmail(strMsg, strMailingList, "Incident Report", 1);
 
-        } catch (SQLException | UnknownHostException ex) {
+        } catch (UnknownHostException ex) {
         }
 
     }
@@ -126,7 +154,7 @@ public class CPublisherManager {
 
             sendToSocial(strMsg);
             sendToSMS(strMsg);
-            sendToEmail(strMsg, "brydencho91@hotmail.com,benj0017@e.ntu.edu.sg,junyi.hjy@gmail.com", "Haze Report", 2);
+            sendToEmail(strMsg, strMailingList, "Haze Report", 2);
 
         } catch (SQLException | UnknownHostException ex) {
         }
@@ -144,7 +172,7 @@ public class CPublisherManager {
             sendToSocial(strMsg);
             sendToSMS(strMsg);
 
-            sendToEmail(strMsg, "brydencho91@hotmail.com,benj0017@e.ntu.edu.sg,junyi.hjy@gmail.com", "Dengue Report", 2);
+            sendToEmail(strMsg, strMailingList, "Dengue Report", 2);
 
         } catch (SQLException | UnknownHostException ex) {
         }

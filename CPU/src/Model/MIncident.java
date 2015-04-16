@@ -43,7 +43,30 @@ public class MIncident {
         objDS.closeConnection();
 
         return objHM;
-        
+
+    }
+
+    public String loadIncidentCategory(String intId) throws SQLException {
+
+        IDataStorage objDS = CDataStorageFactory.getDataStorage();
+
+        String strOut = "";
+
+        objDS.openConnection();
+
+        String strQuery = "SELECT `incidentCategoryTitle` FROM `incidentcategory`\n"
+                + "where `incidentCategoryID` = " + intId;
+
+        ResultSet objRs = objDS.executeQuery(strQuery);
+
+        if (objRs.next()) {
+            strOut = objRs.getString(1);
+        }
+
+        objDS.closeConnection();
+
+        return strOut;
+
     }
 
 }

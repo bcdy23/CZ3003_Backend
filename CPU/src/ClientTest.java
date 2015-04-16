@@ -7,6 +7,9 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.channels.Channels;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -24,31 +27,10 @@ public class ClientTest {
      */
     public static void main(String[] args) {
 
-        int port = 3003;
-        System.out.println("Connecting to local on port " + port);
+        Pattern regInsertIncident = Pattern.compile("INSERT INTO Incident [ (),\'a-zA-Z0-9]* VALUES [ (),\'a-zA-Z0-9]* 'On-going'");
 
-        for (int i = 0; i < 1; i++) {
-
-            new Thread(() -> {
-                try (Socket client = new Socket(InetAddress.getLocalHost(), port)) {
-                    System.out.println("Just connected to "
-                            + client.getRemoteSocketAddress());
-
-                    Writer objWriter = Channels.newWriter(Channels.newChannel(client.getOutputStream()), StandardCharsets.US_ASCII.name());
-                    objWriter.write("1234\n");
-                    objWriter.flush();
-
-                    try (Reader objReader = Channels.newReader(Channels.newChannel(client.getInputStream()), StandardCharsets.US_ASCII.name());
-                            BufferedReader objOutReader = new BufferedReader(objReader)) {
-                        System.out.println(objOutReader.readLine());
-
-                    }
-
-                } catch (IOException e) {
-                    System.out.println(e);
-                }
-            }).start();
-        }
-
+        System.out.println(regInsertIncident.matcher("INSERT INTO Incident (incidentTitle, incidentDetails, incidentCategoryID, incidentStatus, latitude, longitude, address, staffID) VALUES ('lalal', 'dsdsad', 1, 'On-going', '1.3340347', '103.839307', 'Thomson Road Singapore', 3)").find());
+        
+        System.out.println("INSERT INTO Incident (incidentTitle, incidentDetails, incidentCategoryID, incidentStatus, latitude, longitude, address, staffID) VALUES ('lalal', 'dsda', 1, 'On-going', '1.3340347', '103.839307', 'Thomson Road Singapore', 3)".split("VALUES")[1].split(",")[2]);
     }
 }
