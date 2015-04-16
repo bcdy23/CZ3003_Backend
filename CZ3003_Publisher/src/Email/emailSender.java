@@ -13,6 +13,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import java.io.*;
+import java.nio.file.Paths;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
@@ -111,22 +112,24 @@ public class emailSender {
 
         message.setSubject(subject);
         message.setText(messageText);
-        
-        MimeBodyPart messageBodyPart = new MimeBodyPart();
 
-        Multipart multipart = new MimeMultipart();
+        if (messageText.endsWith(".pdf")) {
+            MimeBodyPart messageBodyPart = new MimeBodyPart();
 
-        messageBodyPart = new MimeBodyPart();
-        String file = "path of file to be attached";
-        String fileName = "report.pdf";
-        DataSource source = new FileDataSource(messageText);
-        
-        messageBodyPart.setDataHandler(new DataHandler(source));
-        messageBodyPart.setFileName(fileName);
-        
-        multipart.addBodyPart(messageBodyPart);
+            Multipart multipart = new MimeMultipart();
 
-        message.setContent(multipart);
+            messageBodyPart = new MimeBodyPart();
+            String file = "path of file to be attached";
+            String fileName = "report.pdf";
+            DataSource source = new FileDataSource(messageText);
+
+            messageBodyPart.setDataHandler(new DataHandler(source));
+            messageBodyPart.setFileName(fileName);
+
+            multipart.addBodyPart(messageBodyPart);
+
+            message.setContent(multipart);
+        }
 
         Transport.send(message);
 
