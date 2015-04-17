@@ -66,11 +66,11 @@ public class CPublisherManager {
             + "    ]\n"
             + "}";
 
-    private static final String strMailingList = "bcho002@e.ntu.edu.sg";
+    private static final String strMailingList = "bcho002@e.ntu.edu.sg,benj0017@e.ntu.edu.sg,";
 
     //private static final String strMailingList = "brydencho91@hotmail.com,,";
     // private static final String strSMSList = "+6591544288;";
-    private static final String strSMSList = "+6591544288";
+    private static final String strSMSList = "+6591544288;+6598733453";
 
     private static void sendToSocial(String pStrMsg) throws UnknownHostException {
         CPublisherFactory.getSocialPublisher().sendMessage(String.format(strSocialMsg, "%d", pStrMsg));
